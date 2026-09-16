@@ -46,9 +46,11 @@ public class ConfiguracionesOttController {
             @RequestHeader(value = Constantes.HEADER_ACCEPT, required = false) String accept,
             @RequestBody ConsultaServiciosConfigRequest request) {
 
-        long inicioNanos = System.nanoTime();
+        long inicioMillis = System.currentTimeMillis();
         String trace = traceId == null ? Utilitarios.construirTraceId() : traceId;
         MDC.put(Constantes.MDC_TRACE_ID, trace);
+        Utilitarios.inicioMetodo(log, trace, "consultarServiciosConfig");
+        Utilitarios.actividadInicial(log, trace, "Actividad 1 - [Procesar consulta de configuraciones OTT.]");
         Utilitarios.logInfo(log, trace, "Inicio Operacion - msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
                 msgid, timestamp, canal, usuario, accept);
         Utilitarios.logInfo(log, trace, "Request Completo: {}", request);
@@ -58,7 +60,8 @@ public class ConfiguracionesOttController {
         headers.setTimestamp(timestamp);
         headers.setAccept(accept);
         List<ServicioConfiguracion> body = configuracionesOttService.consultarServiciosConfig(request);
-        long tiempoTotal = Utilitarios.calcularTiempoTranscurridoMillis(inicioNanos);
+        long tiempoTotal = System.currentTimeMillis() - inicioMillis;
+        Utilitarios.actividadFinal(log, trace, "Actividad 1 - [Procesar consulta de configuraciones OTT.]");
 
         StandardResponse<List<ServicioConfiguracion>> response = new StandardResponse<>(
                 ServiceCodes.IDF_SUCCESS,
@@ -68,7 +71,8 @@ public class ConfiguracionesOttController {
                 null,
                 new ResponseAudit(Utilitarios.obtenerFechaHoraActual(), Utilitarios.obtenerFechaHoraActual(), tiempoTotal)
         );
-        Utilitarios.logInfo(log, trace, "Fin Operacion - tiempoTotalMs={}, httpStatus={}", tiempoTotal, 200);
+        Utilitarios.logResponse(log, trace, String.valueOf(response));
+        Utilitarios.finMetodo(log, trace, "consultarServiciosConfig", inicioMillis);
         return ResponseEntity.ok().header(Constantes.HEADER_TRACE_ID, trace).body(response);
     }
 
@@ -84,15 +88,18 @@ public class ConfiguracionesOttController {
             @RequestHeader(value = Constantes.HEADER_ACCEPT, required = false) String accept,
             @RequestBody ListarBonosxPlanRequest request) {
 
-        long inicioNanos = System.nanoTime();
+        long inicioMillis = System.currentTimeMillis();
         String trace = traceId == null ? Utilitarios.construirTraceId() : traceId;
         MDC.put(Constantes.MDC_TRACE_ID, trace);
+        Utilitarios.inicioMetodo(log, trace, "listarBonosxPlan");
+        Utilitarios.actividadInicial(log, trace, "Actividad 1 - [Procesar consulta de bonos por plan.]");
         Utilitarios.logInfo(log, trace, "Inicio Operacion - msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
                 msgid, timestamp, canal, usuario, accept);
         Utilitarios.logInfo(log, trace, "Request Completo: {}", request);
 
         List<BonoPlan> body = configuracionesOttService.listarBonosxPlan(request);
-        long tiempoTotal = Utilitarios.calcularTiempoTranscurridoMillis(inicioNanos);
+        long tiempoTotal = System.currentTimeMillis() - inicioMillis;
+        Utilitarios.actividadFinal(log, trace, "Actividad 1 - [Procesar consulta de bonos por plan.]");
 
         StandardResponse<List<BonoPlan>> response = new StandardResponse<>(
                 ServiceCodes.IDF_SUCCESS,
@@ -102,7 +109,8 @@ public class ConfiguracionesOttController {
                 null,
                 new ResponseAudit(Utilitarios.obtenerFechaHoraActual(), Utilitarios.obtenerFechaHoraActual(), tiempoTotal)
         );
-        Utilitarios.logInfo(log, trace, "Fin Operacion - tiempoTotalMs={}, httpStatus={}", tiempoTotal, 200);
+        Utilitarios.logResponse(log, trace, String.valueOf(response));
+        Utilitarios.finMetodo(log, trace, "listarBonosxPlan", inicioMillis);
         return ResponseEntity.ok().header(Constantes.HEADER_TRACE_ID, trace).body(response);
     }
 }

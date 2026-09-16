@@ -18,6 +18,7 @@ import pe.com.claro.eai.postventa.configuracionesott.common.ServiceCodes;
 import pe.com.claro.eai.postventa.configuracionesott.common.TechnicalException;
 import pe.com.claro.eai.postventa.configuracionesott.repository.ConfiguracionesOttRepository;
 import pe.com.claro.eai.postventa.configuracionesott.common.property.PropertiesExternos;
+import pe.com.claro.eai.postventa.configuracionesott.common.util.Utilitarios;
 
 import java.sql.Types;
 import java.util.ArrayList;
@@ -83,11 +84,21 @@ public class ConfiguracionesOttRepositoryImpl implements ConfiguracionesOttRepos
     public List<ServicioConfiguracion> consultarServiciosConfig(String idGrupoConfig, String valor1, String valor2,
                                                                 String valor3, String valor4, String valor5) {
         try {
+            String traceId = org.slf4j.MDC.get("traceId");
+            Utilitarios.logParametrosEntrada(log, traceId);
+            Utilitarios.logInfo(log, traceId, "Nombre de DB: {}", properties.getBdIotNombre());
+            Utilitarios.logInfo(log, traceId, "Nombre de OWNER: {}", properties.getBdIotOwner());
+            Utilitarios.logInfo(log, traceId, "Nombre de JNDI: {}", properties.getBdIotJndi());
+            Utilitarios.logInfo(log, traceId, "Nombre del procedimiento: {}.{}.{}",
+                    properties.getBdIotOwner(), properties.getBdIotPackage(), properties.getSpConsultarServicios());
             log.info("traceId={} Stored Procedure {}.{} parametros PI_COD_GRUPO={}, filtros recibidos",
                     org.slf4j.MDC.get("traceId"), properties.getBdIotOwner(), properties.getSpConsultarServicios(), idGrupoConfig);
             Map<String, Object> result = consultarConfiguraciones.execute(
                     idGrupoConfig, valor1, valor2, valor3, valor4, valor5);
             validarCodigo((String) result.get("PO_CODRPTA"), (String) result.get("PO_MSJRPTA"));
+            Utilitarios.logParametrosSalida(log, traceId);
+            Utilitarios.logInfo(log, traceId, "PO_CODRPTA: {}, PO_MSJRPTA: {}",
+                    result.get("PO_CODRPTA"), result.get("PO_MSJRPTA"));
             List<ServicioConfiguracion> rows = (List<ServicioConfiguracion>) result.get("PO_CURSOR_LISTA");
             log.info("traceId={} Resultado SP IOTSS_OBTENER_SERVICIOS_CONFIG: filas={}",
                     org.slf4j.MDC.get("traceId"), rows == null ? 0 : rows.size());
@@ -106,10 +117,20 @@ public class ConfiguracionesOttRepositoryImpl implements ConfiguracionesOttRepos
     @SuppressWarnings("unchecked")
     public List<BonoPlan> listarBonosxPlan(String idPlan, String tipoPlan) {
         try {
+            String traceId = org.slf4j.MDC.get("traceId");
+            Utilitarios.logParametrosEntrada(log, traceId);
+            Utilitarios.logInfo(log, traceId, "Nombre de DB: {}", properties.getBdIotNombre());
+            Utilitarios.logInfo(log, traceId, "Nombre del OWNER: {}", properties.getBdIotOwner());
+            Utilitarios.logInfo(log, traceId, "Nombre de JNDI: {}", properties.getBdIotJndi());
+            Utilitarios.logInfo(log, traceId, "Nombre del procedimiento: {}.{}.{}",
+                    properties.getBdIotOwner(), properties.getBdIotPackage(), properties.getSpBonosPlan());
             log.info("traceId={} Stored Procedure {}.{} PI_COD_PLAN={}, PI_TIPO_PLAN={}",
                     org.slf4j.MDC.get("traceId"), properties.getBdIotOwner(), properties.getSpBonosPlan(), idPlan, tipoPlan);
             Map<String, Object> result = consultarBonos.execute(idPlan, tipoPlan);
             validarCodigo((String) result.get("PO_CODRPTA"), (String) result.get("PO_MSJRPTA"));
+            Utilitarios.logParametrosSalida(log, traceId);
+            Utilitarios.logInfo(log, traceId, "PO_CODRPTA: {}, PO_MSJRPTA: {}",
+                    result.get("PO_CODRPTA"), result.get("PO_MSJRPTA"));
             List<BonoPlan> rows = (List<BonoPlan>) result.get("PO_CURSOR_BONOS");
             log.info("traceId={} Resultado SP IOTSS_BONOS_X_PLAN: filas={}",
                     org.slf4j.MDC.get("traceId"), rows == null ? 0 : rows.size());
