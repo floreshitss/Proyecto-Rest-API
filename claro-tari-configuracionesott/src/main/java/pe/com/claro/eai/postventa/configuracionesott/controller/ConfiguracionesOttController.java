@@ -1,7 +1,6 @@
 package pe.com.claro.eai.postventa.configuracionesott.controller;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -20,12 +19,12 @@ import pe.com.claro.eai.postventa.configuracionesott.service.ConfiguracionesOttS
 import pe.com.claro.eai.postventa.configuracionesott.common.property.PropertiesExternos;
 
 import java.util.List;
+import org.slf4j.MDC;
 
 @RestController
 @RequestMapping(Constantes.BASE_PATH)
+@Slf4j
 public class ConfiguracionesOttController {
-
-    private static final Logger logger = LoggerFactory.getLogger(ConfiguracionesOttController.class);
 
     private final ConfiguracionesOttService configuracionesOttService;
     private final PropertiesExternos properties;
@@ -49,9 +48,10 @@ public class ConfiguracionesOttController {
 
         long inicioNanos = System.nanoTime();
         String trace = traceId == null ? Utilitarios.construirTraceId() : traceId;
-        Utilitarios.logInfo(logger, trace, "Inicio Operacion - msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
+        MDC.put(Constantes.MDC_TRACE_ID, trace);
+        Utilitarios.logInfo(log, trace, "Inicio Operacion - msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
                 msgid, timestamp, canal, usuario, accept);
-        Utilitarios.logInfo(logger, trace, "Request Completo: {}", request);
+        Utilitarios.logInfo(log, trace, "Request Completo: {}", request);
 
         RequestHeaders headers = new RequestHeaders(trace, canal, usuario);
         headers.setMsgid(msgid);
@@ -68,7 +68,7 @@ public class ConfiguracionesOttController {
                 null,
                 new ResponseAudit(Utilitarios.obtenerFechaHoraActual(), Utilitarios.obtenerFechaHoraActual(), tiempoTotal)
         );
-        Utilitarios.logInfo(logger, trace, "Fin Operacion - tiempoTotalMs={}", tiempoTotal);
+        Utilitarios.logInfo(log, trace, "Fin Operacion - tiempoTotalMs={}, httpStatus={}", tiempoTotal, 200);
         return ResponseEntity.ok().header(Constantes.HEADER_TRACE_ID, trace).body(response);
     }
 
@@ -86,9 +86,10 @@ public class ConfiguracionesOttController {
 
         long inicioNanos = System.nanoTime();
         String trace = traceId == null ? Utilitarios.construirTraceId() : traceId;
-        Utilitarios.logInfo(logger, trace, "Inicio Operacion - msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
+        MDC.put(Constantes.MDC_TRACE_ID, trace);
+        Utilitarios.logInfo(log, trace, "Inicio Operacion - msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
                 msgid, timestamp, canal, usuario, accept);
-        Utilitarios.logInfo(logger, trace, "Request Completo: {}", request);
+        Utilitarios.logInfo(log, trace, "Request Completo: {}", request);
 
         List<BonoPlan> body = configuracionesOttService.listarBonosxPlan(request);
         long tiempoTotal = Utilitarios.calcularTiempoTranscurridoMillis(inicioNanos);
@@ -101,7 +102,7 @@ public class ConfiguracionesOttController {
                 null,
                 new ResponseAudit(Utilitarios.obtenerFechaHoraActual(), Utilitarios.obtenerFechaHoraActual(), tiempoTotal)
         );
-        Utilitarios.logInfo(logger, trace, "Fin Operacion - tiempoTotalMs={}", tiempoTotal);
+        Utilitarios.logInfo(log, trace, "Fin Operacion - tiempoTotalMs={}, httpStatus={}", tiempoTotal, 200);
         return ResponseEntity.ok().header(Constantes.HEADER_TRACE_ID, trace).body(response);
     }
 }

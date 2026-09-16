@@ -11,6 +11,7 @@ public final class Constantes {
     public static final String HEADER_USUARIO = "userId";
     public static final String HEADER_CANAL = "canal";
     public static final String HEADER_ACCEPT = "accept";
+    public static final String MDC_TRACE_ID = "traceId";
 
     private Constantes() {
     }

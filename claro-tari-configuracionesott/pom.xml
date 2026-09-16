@@ -11,7 +11,7 @@
 
     <groupId>pe.com.claro.eai.postventa</groupId>
     <artifactId>claro-tari-configuracionesott</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
+    <version>1.0.0</version>
     <packaging>war</packaging>
     <name>claro-tari-configuracionesott</name>
     <description>Servicio REST para configuraciones OTT conforme al estándar Claro</description>

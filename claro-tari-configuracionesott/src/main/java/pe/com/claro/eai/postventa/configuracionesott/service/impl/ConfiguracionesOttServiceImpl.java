@@ -2,6 +2,7 @@ package pe.com.claro.eai.postventa.configuracionesott.service.impl;
 
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
+import lombok.extern.slf4j.Slf4j;
 import pe.com.claro.eai.postventa.configuracionesott.canonical.request.ConsultaServiciosConfigRequest;
 import pe.com.claro.eai.postventa.configuracionesott.canonical.request.ListarBonosxPlanRequest;
 import pe.com.claro.eai.postventa.configuracionesott.canonical.response.BonoPlan;
@@ -14,15 +15,14 @@ import pe.com.claro.eai.postventa.configuracionesott.repository.ConfiguracionesO
 import pe.com.claro.eai.postventa.configuracionesott.service.ConfiguracionesOttService;
 import pe.com.claro.eai.postventa.configuracionesott.common.util.Utilitarios;
 import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import pe.com.claro.eai.postventa.configuracionesott.common.property.PropertiesExternos;
+import org.slf4j.MDC;
 
 import java.util.List;
 
 @Service
+@Slf4j
 public class ConfiguracionesOttServiceImpl implements ConfiguracionesOttService {
-
-    private static final Logger logger = LoggerFactory.getLogger(ConfiguracionesOttServiceImpl.class);
     private final ConfiguracionesOttRepository configuracionesOttRepository;
     private final PropertiesExternos properties;
 
@@ -39,7 +39,8 @@ public class ConfiguracionesOttServiceImpl implements ConfiguracionesOttService 
 
     @Override
     public List<ServicioConfiguracion> consultarServiciosConfig(ConsultaServiciosConfigRequest request) {
-        Utilitarios.logInfo(logger, "N/A", "Validaciones consultarServiciosConfig");
+        String traceId = MDC.get("traceId");
+        Utilitarios.logInfo(log, traceId, "Validaciones consultarServiciosConfig");
         validarRequest(request, "consultarServiciosConfig");
         validarCamposObligatorios(request.getIdGrupoConfig(), "idGrupoConfig");
         List<ServicioConfiguracion> result = configuracionesOttRepository.consultarServiciosConfig(
@@ -48,12 +49,14 @@ public class ConfiguracionesOttServiceImpl implements ConfiguracionesOttService 
         if (result.isEmpty()) {
             throw new BusinessException(properties.getConsultarSinDatos());
         }
+        Utilitarios.logInfo(log, traceId, "Resultado servicio consultarServiciosConfig: filas={}", result.size());
         return result;
     }
 
     @Override
     public List<BonoPlan> listarBonosxPlan(ListarBonosxPlanRequest request) {
-        Utilitarios.logInfo(logger, "N/A", "Validaciones listarBonosxPlan");
+        String traceId = MDC.get("traceId");
+        Utilitarios.logInfo(log, traceId, "Validaciones listarBonosxPlan");
         validarRequest(request, "listarBonosxPlan");
         validarCamposObligatorios(request.getCodigoPlan(), "codigoPlan");
         List<BonoPlan> result = configuracionesOttRepository.listarBonosxPlan(
@@ -61,6 +64,7 @@ public class ConfiguracionesOttServiceImpl implements ConfiguracionesOttService 
         if (result.isEmpty()) {
             throw new BusinessException(properties.getBonosSinDatos());
         }
+        Utilitarios.logInfo(log, traceId, "Resultado servicio listarBonosxPlan: filas={}", result.size());
         return result;
     }
 
