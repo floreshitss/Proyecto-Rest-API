@@ -1,11 +1,11 @@
-#logging.config=/config-apps/TARI/properties/claro-tari-configuracionesott/logback.xml
-logging.config=C:/config-apps/TARI/properties/claro-tari-configuracionesott/logback.xml
+#logging.config=/config-apps/properties/claro-tari-configuracionesott/logback.xml
+logging.config=C:/config-apps/properties/claro-tari-configuracionesott/logback.xml
 
 server.port=8080
 spring.application.name=claro-tari-configuracionesott
 app.base-path=/api/tari/configuracionesott/v1.0.0
 
-## -- TARI DB -- ##
+## -- IOT DB -- ##
 bd.iot.timeout.connection.max.time=1
 bd.iot.timeout.execution.max.time=1
 bd.iot.jndi=pe.com.claro.esb.jdbc.dataSources.noXA.iotDs
@@ -14,8 +14,6 @@ bd.iot.nombre=IOTDB
 bd.iot.package=PKG_HUB_IOT
 bd.iot.sp.consultar-servicios=IOTSS_OBTENER_SERVICIOS_CONFIG
 bd.iot.sp.bonos-plan=IOTSS_BONOS_X_PLAN
-spring.datasource.jndi-name=${bd.iot.jndi}
-spring.datasource.driver-class-name=oracle.jdbc.OracleDriver
 
 ## -- ERRORES GENERALES -- ##
 idt1.codigo.ws=-1

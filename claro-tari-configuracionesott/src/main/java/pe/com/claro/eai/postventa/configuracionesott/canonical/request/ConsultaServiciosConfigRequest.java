@@ -1,5 +1,7 @@
 package pe.com.claro.eai.postventa.configuracionesott.canonical.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class ConsultaServiciosConfigRequest {
 
     private String idGrupoConfig;
@@ -25,10 +27,12 @@ public class ConsultaServiciosConfigRequest {
         this.valor1 = valor1;
     }
 
+    @JsonIgnore
     public String getCanal() {
         return valor1;
     }
 
+    @JsonIgnore
     public void setCanal(String canal) {
         this.valor1 = canal;
     }
@@ -41,10 +45,12 @@ public class ConsultaServiciosConfigRequest {
         this.valor2 = valor2;
     }
 
+    @JsonIgnore
     public String getTipoCliente() {
         return valor2;
     }
 
+    @JsonIgnore
     public void setTipoCliente(String tipoCliente) {
         this.valor2 = tipoCliente;
     }

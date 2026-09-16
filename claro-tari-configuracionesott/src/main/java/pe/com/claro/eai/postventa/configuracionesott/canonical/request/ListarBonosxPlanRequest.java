@@ -1,5 +1,7 @@
 package pe.com.claro.eai.postventa.configuracionesott.canonical.request;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class ListarBonosxPlanRequest {
 
     private String idPlan;
@@ -21,10 +23,12 @@ public class ListarBonosxPlanRequest {
         this.tipoPlan = tipoPlan;
     }
 
+    @JsonIgnore
     public String getTipoSolicitud() {
         return tipoPlan;
     }
 
+    @JsonIgnore
     public void setTipoSolicitud(String tipoSolicitud) {
         this.tipoPlan = tipoSolicitud;
     }

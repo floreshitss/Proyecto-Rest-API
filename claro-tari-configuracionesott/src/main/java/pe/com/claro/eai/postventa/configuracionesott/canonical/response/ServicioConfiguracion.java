@@ -1,5 +1,7 @@
 package pe.com.claro.eai.postventa.configuracionesott.canonical.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class ServicioConfiguracion {
 
     private String servicio;
@@ -23,6 +25,7 @@ public class ServicioConfiguracion {
         return servicio;
     }
 
+    @JsonIgnore
     public String getCodigoServicio() {
         return servicio;
     }
@@ -31,6 +34,7 @@ public class ServicioConfiguracion {
         this.servicio = servicio;
     }
 
+    @JsonIgnore
     public void setCodigoServicio(String codigoServicio) {
         this.servicio = codigoServicio;
     }

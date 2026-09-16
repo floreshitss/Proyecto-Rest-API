@@ -1,5 +1,7 @@
 package pe.com.claro.eai.postventa.configuracionesott.canonical.response;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 public class BonoPlan {
 
     private String tmcode;
@@ -31,14 +33,17 @@ public class BonoPlan {
         this.tipoServicio = estado;
     }
 
+    @JsonIgnore
     public String getIdPlan() {
         return tmcode;
     }
 
+    @JsonIgnore
     public String getNombrePlan() {
         return nombreServicio;
     }
 
+    @JsonIgnore
     public String getDescripcion() {
         return descripcionPlan;
     }
