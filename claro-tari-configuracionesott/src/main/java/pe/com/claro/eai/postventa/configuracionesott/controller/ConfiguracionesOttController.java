@@ -3,6 +3,7 @@ package pe.com.claro.eai.postventa.configuracionesott.controller;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 import pe.com.claro.eai.postventa.configuracionesott.canonical.common.RequestHeaders;
 import pe.com.claro.eai.postventa.configuracionesott.canonical.common.ResponseAudit;
@@ -31,18 +32,27 @@ public class ConfiguracionesOttController {
         this.configuracionesOttService = configuracionesOttService;
     }
 
-    @PostMapping(Constantes.CONSULTAR_SERVICIOS_CONFIG)
+    @PostMapping(value = Constantes.CONSULTAR_SERVICIOS_CONFIG,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StandardResponse<List<ServicioConfiguracion>>> consultarServiciosConfig(
             @RequestHeader(value = Constantes.HEADER_TRACE_ID, required = false) String traceId,
+            @RequestHeader(value = Constantes.HEADER_MSG_ID, required = false) String msgid,
+            @RequestHeader(value = Constantes.HEADER_TIMESTAMP, required = false) String timestamp,
             @RequestHeader(value = Constantes.HEADER_CANAL, required = false) String canal,
             @RequestHeader(value = Constantes.HEADER_USUARIO, required = false) String usuario,
+            @RequestHeader(value = Constantes.HEADER_ACCEPT, required = false) String accept,
             @RequestBody ConsultaServiciosConfigRequest request) {
 
         long inicioNanos = System.nanoTime();
         String trace = traceId == null ? Utilitarios.construirTraceId() : traceId;
-        logger.info("Inicio Operacion - traceId={}, canal={}, usuario={}", trace, canal, usuario);
+        logger.info("Inicio Operacion - traceId={}, msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
+                trace, msgid, timestamp, canal, usuario, accept);
 
         RequestHeaders headers = new RequestHeaders(trace, canal, usuario);
+        headers.setMsgid(msgid);
+        headers.setTimestamp(timestamp);
+        headers.setAccept(accept);
         List<ServicioConfiguracion> body = configuracionesOttService.consultarServiciosConfig(request);
         long tiempoTotal = Utilitarios.calcularTiempoTranscurridoMillis(inicioNanos);
 
@@ -58,16 +68,22 @@ public class ConfiguracionesOttController {
         return ResponseEntity.ok().header(Constantes.HEADER_TRACE_ID, trace).body(response);
     }
 
-    @PostMapping(Constantes.LISTAR_BONOS_X_PLAN)
+    @PostMapping(value = Constantes.LISTAR_BONOS_X_PLAN,
+            consumes = MediaType.APPLICATION_JSON_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<StandardResponse<List<BonoPlan>>> listarBonosxPlan(
             @RequestHeader(value = Constantes.HEADER_TRACE_ID, required = false) String traceId,
+            @RequestHeader(value = Constantes.HEADER_MSG_ID, required = false) String msgid,
+            @RequestHeader(value = Constantes.HEADER_TIMESTAMP, required = false) String timestamp,
             @RequestHeader(value = Constantes.HEADER_CANAL, required = false) String canal,
             @RequestHeader(value = Constantes.HEADER_USUARIO, required = false) String usuario,
+            @RequestHeader(value = Constantes.HEADER_ACCEPT, required = false) String accept,
             @RequestBody ListarBonosxPlanRequest request) {
 
         long inicioNanos = System.nanoTime();
         String trace = traceId == null ? Utilitarios.construirTraceId() : traceId;
-        logger.info("Inicio Operacion - traceId={}, canal={}, usuario={}", trace, canal, usuario);
+        logger.info("Inicio Operacion - traceId={}, msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
+                trace, msgid, timestamp, canal, usuario, accept);
 
         List<BonoPlan> body = configuracionesOttService.listarBonosxPlan(request);
         long tiempoTotal = Utilitarios.calcularTiempoTranscurridoMillis(inicioNanos);

@@ -1,7 +1,9 @@
 package pe.com.claro.eai.postventa.configuracionesott.repository.impl;
 
 import org.springframework.dao.DataAccessException;
+import org.springframework.dao.QueryTimeoutException;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.jdbc.CannotGetJdbcConnectionException;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.jdbc.core.SqlOutParameter;
@@ -84,6 +86,10 @@ public class ConfiguracionesOttRepositoryImpl implements ConfiguracionesOttRepos
             validarCodigo((String) result.get("PO_CODRPTA"), (String) result.get("PO_MSJRPTA"));
             List<ServicioConfiguracion> rows = (List<ServicioConfiguracion>) result.get("PO_CURSOR_LISTA");
             return rows == null ? new ArrayList<>() : rows;
+        } catch (QueryTimeoutException ex) {
+            throw new TechnicalException(ServiceCodes.IDT_TIMEOUT, "Error de Timeout en [IOTSS_OBTENER_SERVICIOS_CONFIG]");
+        } catch (CannotGetJdbcConnectionException ex) {
+            throw new TechnicalException(ServiceCodes.IDT_UNAVAILABLE, "Error de Disponibilidad en [IOTDB]");
         } catch (DataAccessException ex) {
             throw new TechnicalException(ServiceCodes.IDT_TECHNICAL, "Error técnico al consultar configuraciones OTT");
         }
@@ -97,6 +103,10 @@ public class ConfiguracionesOttRepositoryImpl implements ConfiguracionesOttRepos
             validarCodigo((String) result.get("PO_CODRPTA"), (String) result.get("PO_MSJRPTA"));
             List<BonoPlan> rows = (List<BonoPlan>) result.get("PO_CURSOR_BONOS");
             return rows == null ? new ArrayList<>() : rows;
+        } catch (QueryTimeoutException ex) {
+            throw new TechnicalException(ServiceCodes.IDT_TIMEOUT, "Error de Timeout en [IOTSS_BONOS_X_PLAN]");
+        } catch (CannotGetJdbcConnectionException ex) {
+            throw new TechnicalException(ServiceCodes.IDT_UNAVAILABLE, "Error de Disponibilidad en [IOTDB]");
         } catch (DataAccessException ex) {
             throw new TechnicalException(ServiceCodes.IDT_TECHNICAL, "Error técnico al consultar bonos del plan");
         }

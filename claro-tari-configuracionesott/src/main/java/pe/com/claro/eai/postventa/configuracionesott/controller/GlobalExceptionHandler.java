@@ -19,26 +19,27 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<StandardResponse<Object>> manejarValidacion(ValidationException ex) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                .body(buildResponse(ServiceCodes.IDF_VALIDATION, ServiceCodes.IDT_TECHNICAL, ex.getMessage(), null));
+                .body(buildResponse(ServiceCodes.IDF_VALIDATION, null, ex.getMessage(), null));
     }
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<StandardResponse<Object>> manejarNegocio(BusinessException ex) {
         return ResponseEntity.status(HttpStatus.OK)
-                .body(buildResponse(ServiceCodes.IDF_BUSINESS, ServiceCodes.IDT_TECHNICAL, ex.getMessage(), null));
+                .body(buildResponse(ServiceCodes.IDF_BUSINESS, null, ex.getMessage(), null));
     }
 
     @ExceptionHandler(TechnicalException.class)
     public ResponseEntity<StandardResponse<Object>> manejarTecnico(TechnicalException ex) {
         String idt = ex.getCode() == null ? ServiceCodes.IDT_TECHNICAL : ex.getCode();
         return ResponseEntity.status(HttpStatus.SERVICE_UNAVAILABLE)
-                .body(buildResponse(ServiceCodes.IDF_BUSINESS, idt, ex.getMessage(), null));
+                .body(buildResponse(ServiceCodes.IDF_TECHNICAL, idt, ex.getMessage(), null));
     }
 
     @ExceptionHandler(Exception.class)
     public ResponseEntity<StandardResponse<Object>> manejarGeneral(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(buildResponse(ServiceCodes.IDF_BUSINESS, ServiceCodes.IDT_TECHNICAL, "Error técnico inesperado", null));
+                .body(buildResponse(ServiceCodes.IDF_TECHNICAL, ServiceCodes.IDT_TECHNICAL,
+                        "Error técnico inesperado", null));
     }
 
     private StandardResponse<Object> buildResponse(String idf, String idt, String description, Object data) {
