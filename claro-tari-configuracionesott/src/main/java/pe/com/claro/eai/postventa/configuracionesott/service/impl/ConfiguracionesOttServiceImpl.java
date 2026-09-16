@@ -1,6 +1,7 @@
 package pe.com.claro.eai.postventa.configuracionesott.service.impl;
 
 import org.springframework.stereotype.Service;
+import org.springframework.beans.factory.annotation.Autowired;
 import pe.com.claro.eai.postventa.configuracionesott.canonical.request.ConsultaServiciosConfigRequest;
 import pe.com.claro.eai.postventa.configuracionesott.canonical.request.ListarBonosxPlanRequest;
 import pe.com.claro.eai.postventa.configuracionesott.canonical.response.BonoPlan;
@@ -25,6 +26,7 @@ public class ConfiguracionesOttServiceImpl implements ConfiguracionesOttService 
     private final ConfiguracionesOttRepository configuracionesOttRepository;
     private final PropertiesExternos properties;
 
+    @Autowired
     public ConfiguracionesOttServiceImpl(ConfiguracionesOttRepository configuracionesOttRepository,
                                          PropertiesExternos properties) {
         this.configuracionesOttRepository = configuracionesOttRepository;
