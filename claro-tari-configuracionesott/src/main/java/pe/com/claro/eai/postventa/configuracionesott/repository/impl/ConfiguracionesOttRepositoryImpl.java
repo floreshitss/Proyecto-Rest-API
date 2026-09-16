@@ -16,6 +16,7 @@ import pe.com.claro.eai.postventa.configuracionesott.common.BusinessException;
 import pe.com.claro.eai.postventa.configuracionesott.common.ServiceCodes;
 import pe.com.claro.eai.postventa.configuracionesott.common.TechnicalException;
 import pe.com.claro.eai.postventa.configuracionesott.repository.ConfiguracionesOttRepository;
+import pe.com.claro.eai.postventa.configuracionesott.common.property.PropertiesExternos;
 
 import java.sql.Types;
 import java.util.ArrayList;
@@ -29,10 +30,7 @@ public class ConfiguracionesOttRepositoryImpl implements ConfiguracionesOttRepos
     private final SimpleJdbcCall consultarBonos;
 
     public ConfiguracionesOttRepositoryImpl(JdbcTemplate jdbcTemplate,
-                                            @Value("${bd.iot.owner}") String schemaName,
-                                            @Value("${bd.iot.package}") String packageName,
-                                            @Value("${bd.iot.sp.consultar-servicios}") String consultarServiciosName,
-                                            @Value("${bd.iot.sp.bonos-plan}") String consultarBonosName) {
+                                            PropertiesExternos properties) {
         RowMapper<ServicioConfiguracion> configuracionMapper = (rs, rowNum) -> {
             ServicioConfiguracion item = new ServicioConfiguracion();
             item.setServicio(rs.getString("PO_CONFV_SERVICIO"));
@@ -51,9 +49,9 @@ public class ConfiguracionesOttRepositoryImpl implements ConfiguracionesOttRepos
                 rs.getString("SERVD_PRECIO"));
 
         consultarConfiguraciones = new SimpleJdbcCall(jdbcTemplate)
-                .withSchemaName(schemaName)
-                .withCatalogName(packageName)
-                .withProcedureName(consultarServiciosName)
+                .withSchemaName(properties.getBdIotOwner())
+                .withCatalogName(properties.getBdIotPackage())
+                .withProcedureName(properties.getSpConsultarServicios())
                 .declareParameters(
                         new SqlParameter("PI_COD_GRUPO", Types.VARCHAR),
                         new SqlParameter("PI_VALOR1", Types.VARCHAR),
@@ -65,9 +63,9 @@ public class ConfiguracionesOttRepositoryImpl implements ConfiguracionesOttRepos
                         new SqlOutParameter("PO_MSJRPTA", Types.VARCHAR),
                         new SqlOutParameter("PO_CURSOR_LISTA", -10, configuracionMapper));
         consultarBonos = new SimpleJdbcCall(jdbcTemplate)
-                .withSchemaName(schemaName)
-                .withCatalogName(packageName)
-                .withProcedureName(consultarBonosName)
+                .withSchemaName(properties.getBdIotOwner())
+                .withCatalogName(properties.getBdIotPackage())
+                .withProcedureName(properties.getSpBonosPlan())
                 .declareParameters(
                         new SqlParameter("PI_COD_PLAN", Types.VARCHAR),
                         new SqlParameter("PI_TIPO_PLAN", Types.VARCHAR),

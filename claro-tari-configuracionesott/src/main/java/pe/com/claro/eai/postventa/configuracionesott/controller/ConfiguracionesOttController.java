@@ -17,6 +17,7 @@ import pe.com.claro.eai.postventa.configuracionesott.common.ServiceCodes;
 import pe.com.claro.eai.postventa.configuracionesott.common.constants.Constantes;
 import pe.com.claro.eai.postventa.configuracionesott.common.util.Utilitarios;
 import pe.com.claro.eai.postventa.configuracionesott.service.ConfiguracionesOttService;
+import pe.com.claro.eai.postventa.configuracionesott.common.property.PropertiesExternos;
 
 import java.util.List;
 
@@ -27,9 +28,11 @@ public class ConfiguracionesOttController {
     private static final Logger logger = LoggerFactory.getLogger(ConfiguracionesOttController.class);
 
     private final ConfiguracionesOttService configuracionesOttService;
+    private final PropertiesExternos properties;
 
-    public ConfiguracionesOttController(ConfiguracionesOttService configuracionesOttService) {
+    public ConfiguracionesOttController(ConfiguracionesOttService configuracionesOttService, PropertiesExternos properties) {
         this.configuracionesOttService = configuracionesOttService;
+        this.properties = properties;
     }
 
     @PostMapping(value = Constantes.CONSULTAR_SERVICIOS_CONFIG,
@@ -46,8 +49,9 @@ public class ConfiguracionesOttController {
 
         long inicioNanos = System.nanoTime();
         String trace = traceId == null ? Utilitarios.construirTraceId() : traceId;
-        logger.info("Inicio Operacion - traceId={}, msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
-                trace, msgid, timestamp, canal, usuario, accept);
+        Utilitarios.logInfo(logger, trace, "Inicio Operacion - msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
+                msgid, timestamp, canal, usuario, accept);
+        Utilitarios.logInfo(logger, trace, "Request Completo: {}", request);
 
         RequestHeaders headers = new RequestHeaders(trace, canal, usuario);
         headers.setMsgid(msgid);
@@ -59,12 +63,12 @@ public class ConfiguracionesOttController {
         StandardResponse<List<ServicioConfiguracion>> response = new StandardResponse<>(
                 ServiceCodes.IDF_SUCCESS,
                 "0",
-                "Consulta exitosa",
+                properties.getConsultarExito(),
                 body,
                 null,
                 new ResponseAudit(Utilitarios.obtenerFechaHoraActual(), Utilitarios.obtenerFechaHoraActual(), tiempoTotal)
         );
-        logger.info("Fin Operacion - traceId={}, tiempoTotalMs={}", trace, tiempoTotal);
+        Utilitarios.logInfo(logger, trace, "Fin Operacion - tiempoTotalMs={}", tiempoTotal);
         return ResponseEntity.ok().header(Constantes.HEADER_TRACE_ID, trace).body(response);
     }
 
@@ -82,8 +86,9 @@ public class ConfiguracionesOttController {
 
         long inicioNanos = System.nanoTime();
         String trace = traceId == null ? Utilitarios.construirTraceId() : traceId;
-        logger.info("Inicio Operacion - traceId={}, msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
-                trace, msgid, timestamp, canal, usuario, accept);
+        Utilitarios.logInfo(logger, trace, "Inicio Operacion - msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
+                msgid, timestamp, canal, usuario, accept);
+        Utilitarios.logInfo(logger, trace, "Request Completo: {}", request);
 
         List<BonoPlan> body = configuracionesOttService.listarBonosxPlan(request);
         long tiempoTotal = Utilitarios.calcularTiempoTranscurridoMillis(inicioNanos);
@@ -91,12 +96,12 @@ public class ConfiguracionesOttController {
         StandardResponse<List<BonoPlan>> response = new StandardResponse<>(
                 ServiceCodes.IDF_SUCCESS,
                 "0",
-                "Consulta exitosa",
+                properties.getBonosExito(),
                 body,
                 null,
                 new ResponseAudit(Utilitarios.obtenerFechaHoraActual(), Utilitarios.obtenerFechaHoraActual(), tiempoTotal)
         );
-        logger.info("Fin Operacion - traceId={}, tiempoTotalMs={}", trace, tiempoTotal);
+        Utilitarios.logInfo(logger, trace, "Fin Operacion - tiempoTotalMs={}", tiempoTotal);
         return ResponseEntity.ok().header(Constantes.HEADER_TRACE_ID, trace).body(response);
     }
 }

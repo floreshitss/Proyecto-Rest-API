@@ -4,15 +4,25 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 
 public class ListarBonosxPlanRequest {
 
-    private String idPlan;
+    private String codigoPlan;
     private String tipoPlan;
 
-    public String getIdPlan() {
-        return idPlan;
+    public String getCodigoPlan() {
+        return codigoPlan;
     }
 
+    public void setCodigoPlan(String codigoPlan) {
+        this.codigoPlan = codigoPlan;
+    }
+
+    @JsonIgnore
+    public String getIdPlan() {
+        return codigoPlan;
+    }
+
+    @JsonIgnore
     public void setIdPlan(String idPlan) {
-        this.idPlan = idPlan;
+        this.codigoPlan = idPlan;
     }
 
     public String getTipoPlan() {
