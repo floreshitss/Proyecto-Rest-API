@@ -17,6 +17,7 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.ArgumentMatchers.nullable;
 
 class ConfiguracionesOttServiceImplTest {
 
@@ -39,8 +40,8 @@ class ConfiguracionesOttServiceImplTest {
         List<ServicioConfiguracion> expected = Arrays.asList(
                 new ServicioConfiguracion("SVC001", "Consulta", "ACTIVO")
         );
-        Mockito.when(repository.consultarServiciosConfig(anyString(), anyString(), anyString(),
-                anyString(), anyString(), anyString())).thenReturn(expected);
+        Mockito.when(repository.consultarServiciosConfig(anyString(), nullable(String.class), nullable(String.class),
+                nullable(String.class), nullable(String.class), nullable(String.class))).thenReturn(expected);
 
         List<ServicioConfiguracion> result = service.consultarServiciosConfig(request);
 
@@ -62,8 +63,8 @@ class ConfiguracionesOttServiceImplTest {
     void consultarServiciosConfig_SinDatos() {
         ConsultaServiciosConfigRequest request = new ConsultaServiciosConfigRequest();
         request.setIdGrupoConfig("GRUPO");
-        Mockito.when(repository.consultarServiciosConfig(anyString(), anyString(), anyString(),
-                anyString(), anyString(), anyString())).thenReturn(Arrays.asList());
+        Mockito.when(repository.consultarServiciosConfig(anyString(), nullable(String.class), nullable(String.class),
+                nullable(String.class), nullable(String.class), nullable(String.class))).thenReturn(Arrays.asList());
 
         assertThrows(BusinessException.class, () -> service.consultarServiciosConfig(request));
     }
@@ -72,8 +73,8 @@ class ConfiguracionesOttServiceImplTest {
     void consultarServiciosConfig_ErrorTecnico() {
         ConsultaServiciosConfigRequest request = new ConsultaServiciosConfigRequest();
         request.setIdGrupoConfig("GRUPO");
-        Mockito.when(repository.consultarServiciosConfig(anyString(), anyString(), anyString(),
-                anyString(), anyString(), anyString()))
+        Mockito.when(repository.consultarServiciosConfig(anyString(), nullable(String.class), nullable(String.class),
+                nullable(String.class), nullable(String.class), nullable(String.class)))
                 .thenThrow(new TechnicalException("-3", "Error técnico"));
 
         assertThrows(TechnicalException.class, () -> service.consultarServiciosConfig(request));
@@ -83,8 +84,8 @@ class ConfiguracionesOttServiceImplTest {
     void consultarServiciosConfig_ParamentrosOpcionales() {
         ConsultaServiciosConfigRequest request = new ConsultaServiciosConfigRequest();
         request.setIdGrupoConfig("GRUPO");
-        Mockito.when(repository.consultarServiciosConfig(anyString(), anyString(), anyString(),
-                anyString(), anyString(), anyString())).thenReturn(Arrays.asList(
+        Mockito.when(repository.consultarServiciosConfig(anyString(), nullable(String.class), nullable(String.class),
+                nullable(String.class), nullable(String.class), nullable(String.class))).thenReturn(Arrays.asList(
                 new ServicioConfiguracion("SVC001", "Consulta", "ACTIVO")));
 
         assertEquals(1, service.consultarServiciosConfig(request).size());
@@ -97,7 +98,7 @@ class ConfiguracionesOttServiceImplTest {
         request.setTipoSolicitud("ACTIVO");
 
         List<BonoPlan> expected = Arrays.asList(new BonoPlan("PLAN_10", "Plan Basico", "Bono 10GB", "VIGENTE"));
-        Mockito.when(repository.listarBonosxPlan(anyString(), anyString())).thenReturn(expected);
+        Mockito.when(repository.listarBonosxPlan(anyString(), nullable(String.class))).thenReturn(expected);
 
         List<BonoPlan> result = service.listarBonosxPlan(request);
 
@@ -118,7 +119,7 @@ class ConfiguracionesOttServiceImplTest {
     void listarBonosxPlan_Negocio() {
         ListarBonosxPlanRequest request = new ListarBonosxPlanRequest();
         request.setIdPlan("PLAN_NO_EXISTE");
-        Mockito.when(repository.listarBonosxPlan(anyString(), anyString())).thenReturn(Arrays.asList());
+        Mockito.when(repository.listarBonosxPlan(anyString(), nullable(String.class))).thenReturn(Arrays.asList());
 
         assertThrows(BusinessException.class, () -> service.listarBonosxPlan(request));
     }
