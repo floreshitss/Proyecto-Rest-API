@@ -146,14 +146,20 @@ public class ConfiguracionesOttRepositoryImpl implements ConfiguracionesOttRepos
     }
 
     private void validarCodigo(String codigo, String mensaje) {
-        if ("1".equals(codigo)) {
-            throw new BusinessException(mensaje);
+        if (codigo == null || codigo.trim().isEmpty()) {
+            throw new TechnicalException(ServiceCodes.IDT_TECHNICAL,
+                    "Respuesta invalida de [IOTDB]: PO_CODRPTA no informado");
         }
-        if (codigo != null && codigo.startsWith("-")) {
+        String codigoNormalizado = codigo.trim();
+        if (codigoNormalizado.startsWith("-")) {
             throw new TechnicalException(ServiceCodes.IDT_TECHNICAL, mensaje);
         }
-        if (codigo != null && !"0".equals(codigo)) {
-            throw new BusinessException(mensaje);
+        if ("0".equals(codigoNormalizado)) {
+            return;
         }
+        if ("1".equals(codigoNormalizado)) {
+            throw new BusinessException(ServiceCodes.IDF_VALIDATION, mensaje);
+        }
+        throw new BusinessException(ServiceCodes.IDF_TECHNICAL, mensaje);
     }
 }

@@ -38,7 +38,8 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<StandardResponse<Object>> manejarNegocio(BusinessException ex) {
         log.warn("Regla de negocio rechazada traceId={}", MDC.get("traceId"), ex);
-        StandardResponse<Object> response = buildResponse(ServiceCodes.IDF_BUSINESS, null, ex.getMessage(), null);
+        String idf = ex.getCode() == null ? ServiceCodes.IDF_BUSINESS : ex.getCode();
+        StandardResponse<Object> response = buildResponse(idf, null, ex.getMessage(), null);
         logResponse(response);
         return ResponseEntity.status(HttpStatus.OK).body(response);
     }
