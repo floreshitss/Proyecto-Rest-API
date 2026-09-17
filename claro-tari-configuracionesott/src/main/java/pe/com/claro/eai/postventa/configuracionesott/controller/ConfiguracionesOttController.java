@@ -1,6 +1,8 @@
 package pe.com.claro.eai.postventa.configuracionesott.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +21,8 @@ import pe.com.claro.eai.postventa.configuracionesott.service.ConfiguracionesOttS
 import pe.com.claro.eai.postventa.configuracionesott.common.property.PropertiesExternos;
 
 import java.util.List;
+import java.util.LinkedHashMap;
+import java.util.Map;
 import org.slf4j.MDC;
 
 @RestController
@@ -28,10 +32,13 @@ public class ConfiguracionesOttController {
 
     private final ConfiguracionesOttService configuracionesOttService;
     private final PropertiesExternos properties;
+    private final ObjectMapper objectMapper;
 
-    public ConfiguracionesOttController(ConfiguracionesOttService configuracionesOttService, PropertiesExternos properties) {
+    public ConfiguracionesOttController(ConfiguracionesOttService configuracionesOttService,
+                                        PropertiesExternos properties, ObjectMapper objectMapper) {
         this.configuracionesOttService = configuracionesOttService;
         this.properties = properties;
+        this.objectMapper = objectMapper;
     }
 
     @PostMapping(value = Constantes.CONSULTAR_SERVICIOS_CONFIG,
@@ -53,12 +60,11 @@ public class ConfiguracionesOttController {
         Utilitarios.actividadInicial(log, trace, "Actividad 1 - [Procesar consulta de configuraciones OTT.]");
         Utilitarios.logInfo(log, trace, "Inicio Operacion - msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
                 msgid, timestamp, canal, usuario, accept);
-        Utilitarios.logInfo(log, trace, "Request Completo: {}", request);
-
         RequestHeaders headers = new RequestHeaders(trace, canal, usuario);
         headers.setMsgid(msgid);
         headers.setTimestamp(timestamp);
         headers.setAccept(accept);
+        Utilitarios.logRequest(log, trace, serializarRequest(headers, request));
         List<ServicioConfiguracion> body = configuracionesOttService.consultarServiciosConfig(request);
         long tiempoTotal = System.currentTimeMillis() - inicioMillis;
         Utilitarios.actividadFinal(log, trace, "Actividad 1 - [Procesar consulta de configuraciones OTT.]");
@@ -71,7 +77,7 @@ public class ConfiguracionesOttController {
                 null,
                 new ResponseAudit(Utilitarios.obtenerFechaHoraActual(), Utilitarios.obtenerFechaHoraActual(), tiempoTotal)
         );
-        Utilitarios.logResponse(log, trace, String.valueOf(response));
+        Utilitarios.logResponse(log, trace, serializar(response));
         Utilitarios.finMetodo(log, trace, "consultarServiciosConfig", inicioMillis);
         return ResponseEntity.ok().header(Constantes.HEADER_TRACE_ID, trace).body(response);
     }
@@ -95,8 +101,11 @@ public class ConfiguracionesOttController {
         Utilitarios.actividadInicial(log, trace, "Actividad 1 - [Procesar consulta de bonos por plan.]");
         Utilitarios.logInfo(log, trace, "Inicio Operacion - msgid={}, timestamp={}, canal={}, usuario={}, accept={}",
                 msgid, timestamp, canal, usuario, accept);
-        Utilitarios.logInfo(log, trace, "Request Completo: {}", request);
-
+        RequestHeaders headers = new RequestHeaders(trace, canal, usuario);
+        headers.setMsgid(msgid);
+        headers.setTimestamp(timestamp);
+        headers.setAccept(accept);
+        Utilitarios.logRequest(log, trace, serializarRequest(headers, request));
         List<BonoPlan> body = configuracionesOttService.listarBonosxPlan(request);
         long tiempoTotal = System.currentTimeMillis() - inicioMillis;
         Utilitarios.actividadFinal(log, trace, "Actividad 1 - [Procesar consulta de bonos por plan.]");
@@ -109,8 +118,25 @@ public class ConfiguracionesOttController {
                 null,
                 new ResponseAudit(Utilitarios.obtenerFechaHoraActual(), Utilitarios.obtenerFechaHoraActual(), tiempoTotal)
         );
-        Utilitarios.logResponse(log, trace, String.valueOf(response));
+        Utilitarios.logResponse(log, trace, serializar(response));
         Utilitarios.finMetodo(log, trace, "listarBonosxPlan", inicioMillis);
         return ResponseEntity.ok().header(Constantes.HEADER_TRACE_ID, trace).body(response);
+    }
+
+    private String serializarRequest(RequestHeaders headers, Object body) {
+        Map<String, Object> request = new LinkedHashMap<>();
+        request.put("headers", headers);
+        request.put("body", body);
+        return serializar(request);
+    }
+
+    private String serializar(Object value) {
+        try {
+            return objectMapper.writerWithDefaultPrettyPrinter().writeValueAsString(value);
+        } catch (JsonProcessingException ex) {
+            Utilitarios.logError(log, MDC.get(Constantes.MDC_TRACE_ID),
+                    "No se pudo serializar el mensaje de trazabilidad", ex);
+            return "{\"serializationError\":true}";
+        }
     }
 }

@@ -55,9 +55,8 @@ public final class Utilitarios {
         logger.warn(formatIdTx(idTransaccion) + " " + mensaje, parametros);
     }
 
-    public static void logRequest(Logger logger, String idTransaccion, String headers, String body) {
-        logger.info(formatIdTx(idTransaccion) + " Header Request: \n" + headers);
-        logger.info(formatIdTx(idTransaccion) + " Body Request: \n" + body);
+    public static void logRequest(Logger logger, String idTransaccion, String request) {
+        logger.info(formatIdTx(idTransaccion) + " Request: \n" + request);
     }
 
     public static void logResponse(Logger logger, String idTransaccion, String body) {
