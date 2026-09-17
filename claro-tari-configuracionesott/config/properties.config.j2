@@ -1,0 +1,42 @@
+#logging.config=/config-apps/properties/claro-tari-configuracionesott/logback.xml
+logging.config=C:/config-apps/properties/claro-tari-configuracionesott/logback.xml
+
+server.port=8080
+spring.application.name=claro-tari-configuracionesott
+app.base-path=/api/tari/configuracionesott/v1.0.0
+
+## -- IOT DB -- ##
+bd.iot.timeout.connection.max.time=1
+bd.iot.timeout.execution.max.time=1
+bd.iot.jndi=pe.com.claro.esb.jdbc.dataSources.noXA.iotDs
+bd.iot.owner=IOT
+bd.iot.nombre=IOTDB
+bd.iot.package=PKG_HUB_IOT
+bd.iot.sp.consultar-servicios=IOTSS_OBTENER_SERVICIOS_CONFIG
+bd.iot.sp.bonos-plan=IOTSS_BONOS_X_PLAN
+
+## -- ERRORES GENERALES -- ##
+idt1.codigo.ws=-1
+idt1.mensaje.ws=Error de Timeout en [RECURSO]
+idt2.codigo.ws=-2
+idt2.mensaje.ws=Error de Disponibilidad en [RECURSO]
+idt3.codigo.ws=-3
+idt3.mensaje.ws=Error Tecnico en [RECURSO]
+
+## -- METODOS -- ##
+metodo.consultar.servicios.config.codigo.idf0=0
+metodo.consultar.servicios.config.mensaje.idf0=Operacion exitosa
+metodo.consultar.servicios.config.codigo.idf1=1
+metodo.consultar.servicios.config.mensaje.idf1=Parametros obligatorios incompletos: [DETALLE]
+metodo.consultar.servicios.config.codigo.idf2=2
+metodo.consultar.servicios.config.mensaje.idf2=Error al consultar configuraciones OTT en base de datos
+metodo.consultar.servicios.config.codigo.idf3=3
+metodo.consultar.servicios.config.mensaje.idf3=Error técnico al consultar configuraciones OTT
+metodo.listar.bonos.plan.codigo.idf0=0
+metodo.listar.bonos.plan.mensaje.idf0=Operacion exitosa
+metodo.listar.bonos.plan.codigo.idf1=1
+metodo.listar.bonos.plan.mensaje.idf1=Parametros obligatorios incompletos: [DETALLE]
+metodo.listar.bonos.plan.codigo.idf2=2
+metodo.listar.bonos.plan.mensaje.idf2=Error al consultar bonos del plan en base de datos
+metodo.listar.bonos.plan.codigo.idf3=3
+metodo.listar.bonos.plan.mensaje.idf3=Error técnico al consultar bonos del plan
