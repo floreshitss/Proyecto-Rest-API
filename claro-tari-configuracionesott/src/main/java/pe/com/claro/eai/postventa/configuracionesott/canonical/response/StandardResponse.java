@@ -4,70 +4,30 @@ import pe.com.claro.eai.postventa.configuracionesott.canonical.common.ResponseAu
 
 public class StandardResponse<T> {
 
-    private String idf;
-    private String idt;
-    private String descripcion;
-    private T data;
-    private ErrorResponse error;
-    private ResponseAudit audit;
+    private ResponseAudit responseAudit;
+    private T responseData;
 
     public StandardResponse() {
     }
 
-    public StandardResponse(String idf, String idt, String descripcion, T data, ErrorResponse error, ResponseAudit audit) {
-        this.idf = idf;
-        this.idt = idt;
-        this.descripcion = descripcion;
-        this.data = data;
-        this.error = error;
-        this.audit = audit;
+    public StandardResponse(ResponseAudit responseAudit, T responseData) {
+        this.responseAudit = responseAudit;
+        this.responseData = responseData;
     }
 
-    public String getIdf() {
-        return idf;
+    public ResponseAudit getResponseAudit() {
+        return responseAudit;
     }
 
-    public void setIdf(String idf) {
-        this.idf = idf;
+    public void setResponseAudit(ResponseAudit responseAudit) {
+        this.responseAudit = responseAudit;
     }
 
-    public String getIdt() {
-        return idt;
+    public T getResponseData() {
+        return responseData;
     }
 
-    public void setIdt(String idt) {
-        this.idt = idt;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public T getData() {
-        return data;
-    }
-
-    public void setData(T data) {
-        this.data = data;
-    }
-
-    public ErrorResponse getError() {
-        return error;
-    }
-
-    public void setError(ErrorResponse error) {
-        this.error = error;
-    }
-
-    public ResponseAudit getAudit() {
-        return audit;
-    }
-
-    public void setAudit(ResponseAudit audit) {
-        this.audit = audit;
+    public void setResponseData(T responseData) {
+        this.responseData = responseData;
     }
 }

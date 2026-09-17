@@ -70,13 +70,7 @@ public class ConfiguracionesOttController {
         Utilitarios.actividadFinal(log, trace, "Actividad 1 - [Procesar consulta de configuraciones OTT.]");
 
         StandardResponse<List<ServicioConfiguracion>> response = new StandardResponse<>(
-                ServiceCodes.IDF_SUCCESS,
-                "0",
-                properties.getConsultarExito(),
-                body,
-                null,
-                new ResponseAudit(Utilitarios.obtenerFechaHoraActual(), Utilitarios.obtenerFechaHoraActual(), tiempoTotal)
-        );
+                new ResponseAudit(ServiceCodes.IDF_SUCCESS, properties.getConsultarExito(), trace), body);
         Utilitarios.logResponse(log, trace, serializar(response));
         Utilitarios.finMetodo(log, trace, "consultarServiciosConfig", inicioMillis);
         return ResponseEntity.ok().header(Constantes.HEADER_TRACE_ID, trace).body(response);
@@ -111,13 +105,7 @@ public class ConfiguracionesOttController {
         Utilitarios.actividadFinal(log, trace, "Actividad 1 - [Procesar consulta de bonos por plan.]");
 
         StandardResponse<List<BonoPlan>> response = new StandardResponse<>(
-                ServiceCodes.IDF_SUCCESS,
-                "0",
-                properties.getBonosExito(),
-                body,
-                null,
-                new ResponseAudit(Utilitarios.obtenerFechaHoraActual(), Utilitarios.obtenerFechaHoraActual(), tiempoTotal)
-        );
+                new ResponseAudit(ServiceCodes.IDF_SUCCESS, properties.getBonosExito(), trace), body);
         Utilitarios.logResponse(log, trace, serializar(response));
         Utilitarios.finMetodo(log, trace, "listarBonosxPlan", inicioMillis);
         return ResponseEntity.ok().header(Constantes.HEADER_TRACE_ID, trace).body(response);

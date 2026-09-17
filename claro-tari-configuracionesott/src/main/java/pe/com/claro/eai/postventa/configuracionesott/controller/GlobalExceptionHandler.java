@@ -64,13 +64,8 @@ public class GlobalExceptionHandler {
 
     private StandardResponse<Object> buildResponse(String idf, String idt, String description, Object data) {
         return new StandardResponse<>(
-                idf,
-                idt,
-                description,
-                data,
-                new ErrorResponse(idt, description),
-                new ResponseAudit(Utilitarios.obtenerFechaHoraActual(), Utilitarios.obtenerFechaHoraActual(), 0L)
-        );
+                new ResponseAudit(idt == null ? idf : idt, description,
+                        MDC.get("traceId")), data);
     }
 
     private void logResponse(StandardResponse<Object> response) {

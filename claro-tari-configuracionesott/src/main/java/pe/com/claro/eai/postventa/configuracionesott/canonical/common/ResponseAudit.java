@@ -2,40 +2,40 @@ package pe.com.claro.eai.postventa.configuracionesott.canonical.common;
 
 public class ResponseAudit {
 
-    private String inicioOperacion;
-    private String finOperacion;
-    private Long tiempoTotal;
+    private String codigoRespuesta;
+    private String mensajeRespuesta;
+    private String idTransaccion;
 
     public ResponseAudit() {
     }
 
-    public ResponseAudit(String inicioOperacion, String finOperacion, Long tiempoTotal) {
-        this.inicioOperacion = inicioOperacion;
-        this.finOperacion = finOperacion;
-        this.tiempoTotal = tiempoTotal;
+    public ResponseAudit(String codigoRespuesta, String mensajeRespuesta, String idTransaccion) {
+        this.codigoRespuesta = codigoRespuesta;
+        this.mensajeRespuesta = mensajeRespuesta;
+        this.idTransaccion = idTransaccion;
     }
 
-    public String getInicioOperacion() {
-        return inicioOperacion;
+    public String getCodigoRespuesta() {
+        return codigoRespuesta;
     }
 
-    public void setInicioOperacion(String inicioOperacion) {
-        this.inicioOperacion = inicioOperacion;
+    public void setCodigoRespuesta(String codigoRespuesta) {
+        this.codigoRespuesta = codigoRespuesta;
     }
 
-    public String getFinOperacion() {
-        return finOperacion;
+    public String getMensajeRespuesta() {
+        return mensajeRespuesta;
     }
 
-    public void setFinOperacion(String finOperacion) {
-        this.finOperacion = finOperacion;
+    public void setMensajeRespuesta(String mensajeRespuesta) {
+        this.mensajeRespuesta = mensajeRespuesta;
     }
 
-    public Long getTiempoTotal() {
-        return tiempoTotal;
+    public String getIdTransaccion() {
+        return idTransaccion;
     }
 
-    public void setTiempoTotal(Long tiempoTotal) {
-        this.tiempoTotal = tiempoTotal;
+    public void setIdTransaccion(String idTransaccion) {
+        this.idTransaccion = idTransaccion;
     }
 }
